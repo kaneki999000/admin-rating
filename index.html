@@ -178,6 +178,8 @@
       display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid var(--border);
     }
+    .section-head-title { display: flex; align-items: center; gap: 8px; }
+    .section-head-title svg { width: 16px; height: 16px; color: var(--slate-mid); }
     .section-head h2 { font-family: "Sora", sans-serif; font-size: 14px; font-weight: 700; color: var(--slate); }
     .section-head .meta { font-size: 12px; color: var(--slate-light); font-weight: 500; }
 
@@ -243,35 +245,71 @@
     td { padding: 12px 16px; font-size: 13px; color: var(--slate-mid); vertical-align: middle; }
     td.driver-cell { font-weight: 700; color: var(--slate); }
     .pill {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px;
+      line-height: 1;
     }
+    .pill svg { width: 12px; height: 12px; flex-shrink: 0; }
     .pill-green { background: var(--green-light); color: var(--green-dark); }
     .pill-red { background: var(--red-light); color: var(--red); }
     .pill-amber { background: var(--amber-light); color: #b45309; }
     .pill-blue { background: var(--blue-light); color: var(--blue); }
 
-    /* ── FILTERS ── */
+    /* ── TIDY RESPONSIVE FILTER BAR ── */
     .filter-bar {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
       background: #f8fafc;
     }
-    .filter-bar input, .filter-bar select {
-      border: 1.5px solid var(--border); border-radius: 10px;
-      padding: 7px 12px; font-size: 13px; font-family: inherit;
-      color: var(--slate); background: var(--card); outline: none;
-      transition: all 0.2s; appearance: none; -webkit-appearance: none;
+    .filter-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--slate-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--green-mid); }
-    .filter-bar input { width: 200px; }
-    .filter-label { font-size: 12px; font-weight: 600; color: var(--slate-light); }
+    .filter-label svg { width: 14px; height: 14px; color: var(--slate-light); }
+    
+    .filter-bar input, .filter-bar select {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--slate);
+      background: var(--card);
+      outline: none;
+      transition: all 0.2s ease;
+      height: 40px;
+    }
+    .filter-bar input:focus, .filter-bar select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+    }
+    .filter-bar input[type="text"] {
+      width: 240px;
+    }
     .filter-select-wrap { position: relative; }
+    .filter-select-wrap select {
+      padding-right: 36px;
+      min-width: 150px;
+      appearance: none;
+      -webkit-appearance: none;
+    }
     .filter-select-wrap::after {
-      content: ""; position: absolute; right: 10px; top: 50%;
+      content: ""; position: absolute; right: 14px; top: 50%;
       transform: translateY(-50%); width: 0; height: 0;
       border-left: 4px solid transparent; border-right: 4px solid transparent;
       border-top: 5px solid var(--slate-light); pointer-events: none;
+    }
+    .filter-bar input[type="date"] {
+      width: 160px;
     }
 
     /* ── PAGINATION ── */
@@ -314,8 +352,13 @@
     }
     .drawer-resp-row:last-child { border-bottom: none; }
     .drawer-q { flex: 1; color: var(--slate-mid); font-weight: 500; }
+    .drawer-q-text { display: block; }
+    .drawer-note { 
+      font-size: 11px; color: var(--slate-light); font-style: italic; margin-top: 5px; 
+      display: inline-flex; align-items: center; gap: 4px; background: #f8fafc; padding: 3px 8px; border-radius: 6px;
+    }
+    .drawer-note svg { width: 12px; height: 12px; color: var(--slate-mid); }
     .drawer-a { font-weight: 700; flex-shrink: 0; }
-    .drawer-note { font-size: 11px; color: var(--slate-light); font-style: italic; margin-top: 3px; }
     .drawer-close-btn {
       width: 100%; margin: 16px 0 8px; padding: 14px;
       background: #f1f5f9; border: none; border-radius: 12px;
@@ -324,7 +367,8 @@
 
     /* ── EMPTY / LOADER ── */
     .spinner { width: 32px; height: 32px; border: 3px solid var(--green-light); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 40px auto; }
-    .empty-msg { text-align: center; padding: 40px 20px; color: var(--slate-light); font-size: 14px; }
+    .empty-msg { text-align: center; padding: 40px 20px; color: var(--slate-light); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; }
+    .empty-msg svg { width: 24px; height: 24px; color: var(--slate-light); }
 
     /* ── PAGE VISIBILITY ── */
     .page-section { display: none; }
@@ -341,6 +385,21 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .two-col { grid-template-columns: 1fr; }
     }
+    @media (max-width: 768px) {
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 14px 16px;
+      }
+      .filter-bar input[type="text"],
+      .filter-bar input[type="date"],
+      .filter-select-wrap,
+      .filter-select-wrap select {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+    }
     @media (max-width: 700px) {
       :root { --sidebar-w: 240px; }
       .sidebar { transform: translateX(-100%); }
@@ -351,7 +410,6 @@
       .hamburger { display: flex; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .content { padding: 16px; }
-      .filter-bar input { width: 130px; }
       .stat-value { font-size: 24px; }
       table thead th:nth-child(4),
       table thead th:nth-child(5),
@@ -366,7 +424,6 @@
 <body>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-mark">
@@ -405,9 +462,7 @@
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main">
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
       <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
@@ -426,9 +481,7 @@
 
   <div class="content">
 
-    <!-- ═══════════ DASHBOARD PAGE ═══════════ -->
     <div id="page-dashboard" class="page-section active">
-      <!-- Stats -->
       <div class="stats-grid" id="statsGrid">
         <div class="stat-card green">
           <div class="stat-icon green">
@@ -473,30 +526,36 @@
       </div>
 
       <div class="two-col">
-        <!-- Driver Leaderboard -->
         <div class="section-card">
           <div class="section-head">
-            <h2>🏆 Driver Leaderboard</h2>
+            <div class="section-head-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 3a2 2 0 100-4H4a2 2 0 100 4h16z"/></svg>
+              <h2>Driver Leaderboard</h2>
+            </div>
             <span class="meta">By avg score</span>
           </div>
           <div class="driver-list" id="leaderboardList"><div class="spinner"></div></div>
         </div>
 
-        <!-- Recent Low-Rating Alerts -->
         <div class="section-card">
           <div class="section-head">
-            <h2>⚠️ Recent Alerts</h2>
+            <div class="section-head-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <h2>Recent Alerts</h2>
+            </div>
             <span class="meta">Low ratings flagged</span>
           </div>
           <div class="alert-list" id="alertList"><div class="spinner"></div></div>
         </div>
       </div>
 
-      <!-- Branch summary -->
       <div class="full-col">
         <div class="section-card">
           <div class="section-head">
-            <h2>📍 Branch Summary</h2>
+            <div class="section-head-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <h2>Branch Summary</h2>
+            </div>
             <span class="meta">Submissions per branch</span>
           </div>
           <div class="table-wrap">
@@ -509,23 +568,25 @@
       </div>
     </div>
 
-    <!-- ═══════════ SUBMISSIONS PAGE ═══════════ -->
     <div id="page-submissions" class="page-section">
       <div class="section-card">
         <div class="filter-bar">
-          <span class="filter-label">Filter:</span>
+          <span class="filter-label">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+            Filter:
+          </span>
           <input type="text" id="filterSearch" placeholder="Driver / Submitter…" oninput="filterTable()" />
           <div class="filter-select-wrap">
             <select id="filterBranch" onchange="filterTable()"><option value="">All Branches</option></select>
           </div>
           <div class="filter-select-wrap">
             <select id="filterAlert" onchange="filterTable()">
-              <option value="">All</option>
-              <option value="alert">⚠️ Alerts only</option>
-              <option value="ok">✅ OK only</option>
+              <option value="">All Statuses</option>
+              <option value="alert">Alerts Only</option>
+              <option value="ok">OK Only</option>
             </select>
           </div>
-          <input type="date" id="filterDate" onchange="filterTable()" style="width:140px" />
+          <input type="date" id="filterDate" onchange="filterTable()" />
         </div>
         <div class="table-wrap">
           <table>
@@ -537,11 +598,13 @@
       </div>
     </div>
 
-    <!-- ═══════════ DRIVERS PAGE ═══════════ -->
     <div id="page-drivers" class="page-section">
       <div class="section-card">
         <div class="section-head">
-          <h2>Driver Performance Scores</h2>
+          <div class="section-head-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <h2>Driver Performance Scores</h2>
+          </div>
           <span class="meta" id="driversCount">—</span>
         </div>
         <div class="table-wrap">
@@ -553,10 +616,15 @@
       </div>
     </div>
 
-    <!-- ═══════════ ALERTS PAGE ═══════════ -->
     <div id="page-alerts" class="page-section">
       <div class="section-card">
-        <div class="section-head"><h2>⚠️ All Low-Rating Alerts</h2><span class="meta" id="alertsCount">—</span></div>
+        <div class="section-head">
+          <div class="section-head-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <h2>All Low-Rating Alerts</h2>
+          </div>
+          <span class="meta" id="alertsCount">—</span>
+        </div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Driver</th><th>Branch</th><th>Trip Date</th><th>Flagged Issues</th><th>Submitted By</th><th>Time</th></tr></thead>
@@ -566,11 +634,7 @@
       </div>
     </div>
 
-  </div><!-- /content -->
-</div><!-- /main -->
-
-<!-- DRAWER for submission detail -->
-<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()">
+  </div></div><div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()">
   <div class="drawer" onclick="event.stopPropagation()">
     <div class="drawer-handle"></div>
     <div class="drawer-head">
@@ -714,7 +778,14 @@
       .sort((a, b) => b.avg - a.avg).slice(0, 8);
 
     const el = document.getElementById("leaderboardList");
-    if (!sorted.length) { el.innerHTML = '<div class="empty-msg">No data yet.</div>'; return; }
+    if (!sorted.length) { 
+      el.innerHTML = `
+        <div class="empty-msg">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+          <span>No data yet.</span>
+        </div>`; 
+      return; 
+    }
     el.innerHTML = sorted.map((d, i) => `
       <div class="driver-row">
         <div class="driver-rank">${i + 1}</div>
@@ -731,7 +802,14 @@
   function renderAlertList() {
     const alerts = allRatings.filter(r => hasAlert(r.responses)).slice(0, 6);
     const el = document.getElementById("alertList");
-    if (!alerts.length) { el.innerHTML = '<div class="empty-msg">🎉 No alerts! All ratings are positive.</div>'; return; }
+    if (!alerts.length) { 
+      el.innerHTML = `
+        <div class="empty-msg">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>No alerts! All ratings are positive.</span>
+        </div>`; 
+      return; 
+    }
     el.innerHTML = alerts.map(r => {
       const issues = Object.values(r.responses || {}).filter(resp => isBad(resp.answer)).length;
       return `<div class="alert-row">
@@ -761,13 +839,23 @@
     tbody.innerHTML = rows.map(([branch, d]) => {
       const avg = d.scores.length ? (d.scores.reduce((a, b) => a + b, 0) / d.scores.length).toFixed(2) : null;
       const status = d.alerts === 0 ? "pill-green" : d.alerts < 3 ? "pill-amber" : "pill-red";
-      const statusText = d.alerts === 0 ? "✅ Good" : d.alerts < 3 ? "⚠️ Watch" : "🔴 Critical";
+      
+      let statusIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      let statusText = "Good";
+      if (d.alerts > 0 && d.alerts < 3) {
+        statusIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+        statusText = "Watch";
+      } else if (d.alerts >= 3) {
+        statusIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+        statusText = "Critical";
+      }
+
       return `<tr>
         <td class="driver-cell">${branch}</td>
         <td>${d.count}</td>
         <td><span class="pill ${avg === null ? 'pill-blue' : pillClass(avg)}">${avg || "N/A"}</span></td>
         <td>${d.alerts === 0 ? "—" : `<span class="pill pill-red">${d.alerts}</span>`}</td>
-        <td><span class="pill ${status}">${statusText}</span></td>
+        <td><span class="pill ${status}">${statusIcon}${statusText}</span></td>
       </tr>`;
     }).join("");
   }
@@ -797,17 +885,22 @@
     const start = (currentPage - 1) * PAGE_SIZE;
     const rows = filteredRows.slice(start, start + PAGE_SIZE);
     const tbody = document.getElementById("submissionsTableBody");
-    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg">No submissions match the filter.</div></td></tr>'; renderPagination(); return; }
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>No submissions match the filter.</span></div></td></tr>'; renderPagination(); return; }
 
     tbody.innerHTML = rows.map(r => {
       const isAlert = hasAlert(r.responses);
+      const statusIcon = isAlert 
+        ? `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`
+        : `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      const statusText = isAlert ? "Alert" : "OK";
+
       return `<tr onclick="openDrawer('${r.id}')">
         <td class="driver-cell">${allDrivers[r.driver_id] || "Unknown"}</td>
         <td>${r.branch || "—"}</td>
         <td>${r.rating_date || "—"}</td>
         <td>${r.submitted_by || "—"}</td>
         <td style="font-family:'DM Mono',monospace;font-size:12px">${new Date(r.created_at).toLocaleString()}</td>
-        <td><span class="pill ${isAlert ? 'pill-red' : 'pill-green'}">${isAlert ? "⚠️ Alert" : "✅ OK"}</span></td>
+        <td><span class="pill ${isAlert ? 'pill-red' : 'pill-green'}">${statusIcon}${statusText}</span></td>
       </tr>`;
     }).join("");
     renderPagination();
@@ -850,8 +943,10 @@
         const resp = (r.responses || {})[q.id];
         if (!resp) return "";
         const bad = isBad(resp.answer);
+        const noteHtml = resp.note ? `<div class="drawer-note"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> ${resp.note}</div>` : "";
+        
         return `<div class="drawer-resp-row">
-          <div class="drawer-q">${q.question_text}${resp.note ? `<div class="drawer-note">📝 ${resp.note}</div>` : ""}</div>
+          <div class="drawer-q"><span class="drawer-q-text">${q.question_text}</span>${noteHtml}</div>
           <div class="drawer-a" style="color:${bad ? 'var(--red)' : resp.answer === '' ? 'var(--slate-light)' : 'var(--green-dark)'}">${resp.answer || "Skipped"}</div>
         </div>`;
       }).join("");
@@ -902,7 +997,7 @@
     document.getElementById("alertsCount").textContent = `${alerts.length} alerts`;
     document.getElementById("alertBadge").textContent = alerts.length;
     const tbody = document.getElementById("alertsTableBody");
-    if (!alerts.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg">🎉 No low-rating alerts found.</div></td></tr>'; return; }
+    if (!alerts.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>No low-rating alerts found.</span></div></td></tr>'; return; }
     tbody.innerHTML = alerts.map(r => {
       const issues = Object.entries(r.responses || {})
         .filter(([, resp]) => isBad(resp.answer))
