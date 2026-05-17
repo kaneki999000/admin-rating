@@ -410,6 +410,17 @@
       .hamburger { display: flex; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .content { padding: 16px; }
+      
+      /* Better mobile spacing and fluid widths for the filter items */
+      .filter-bar { gap: 8px; padding: 12px; }
+      .filter-label { width: 100%; margin-bottom: 2px; } /* Wraps label to its own row */
+      .filter-bar input, 
+      .filter-bar select, 
+      .filter-select-wrap { 
+        flex: 1 1 calc(50% - 8px); /* Let elements grow side-by-side equitably */
+        min-width: 120px; 
+      }
+      
       .stat-value { font-size: 24px; }
       table thead th:nth-child(4),
       table thead th:nth-child(5),
