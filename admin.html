@@ -1,1 +1,2394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver Rating · Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
+      :root {
+        --green: #10b981;
+        --green-dark: #059669;
+        --green-light: #ecfdf5;
+        --green-mid: #6ee7b7;
+        --slate: #0f172a;
+        --slate-mid: #475569;
+        --slate-light: #94a3b8;
+        --bg: #f0f4f8;
+        --card: #ffffff;
+        --border: #e8edf2;
+        --red: #ef4444;
+        --red-light: #fef2f2;
+        --amber: #f59e0b;
+        --amber-light: #fffbeb;
+        --blue: #3b82f6;
+        --blue-light: #eff6ff;
+        --sidebar-w: 240px;
+        --topbar-h: 64px;
+      }
+
+      html,
+      body {
+        height: 100%;
+        background: var(--bg);
+        font-family: "DM Sans", sans-serif;
+        color: var(--slate);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── LAYOUT ── */
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* ── SIDEBAR ── */
+      .sidebar {
+        width: var(--sidebar-w);
+        background: var(--slate);
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 200;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sidebar-logo {
+        padding: 20px 20px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .logo-mark {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--green), var(--green-dark));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+        margin-bottom: 10px;
+      }
+      .logo-mark svg {
+        width: 20px;
+        height: 20px;
+        color: #fff;
+      }
+      .logo-title {
+        font-family: "Sora", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.2;
+      }
+      .logo-sub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .sidebar-nav {
+        flex: 1;
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        overflow-y: auto;
+      }
+      .nav-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.25);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 12px 8px 6px;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.15s;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+      }
+      .nav-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.07);
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .nav-item.active {
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--green-mid);
+      }
+      .nav-item .badge {
+        margin-left: auto;
+        font-size: 10px;
+        font-weight: 700;
+        background: var(--red);
+        color: #fff;
+        border-radius: 999px;
+        padding: 1px 6px;
+        min-width: 18px;
+        text-align: center;
+      }
+      .sidebar-footer {
+        padding: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.25);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sidebar-footer svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+
+      /* ── TOPBAR ── */
+      .main {
+        margin-left: var(--sidebar-w);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .topbar {
+        height: var(--topbar-h);
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        padding: 6px;
+        border: none;
+        background: none;
+      }
+      .hamburger span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--slate-mid);
+        border-radius: 2px;
+        transition: all 0.2s;
+      }
+      .page-title {
+        font-family: "Sora", sans-serif;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--slate);
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .refresh-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--green-light);
+        color: var(--green-dark);
+        border: none;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+      }
+      .refresh-btn:hover {
+        background: var(--green);
+        color: #fff;
+      }
+      .refresh-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+      .refresh-btn.spinning svg {
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .date-badge {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--slate-light);
+        background: #f1f5f9;
+        padding: 5px 10px;
+        border-radius: 8px;
+      }
+
+      /* ── CONTENT AREA ── */
+      .content {
+        padding: 24px;
+        flex: 1;
+      }
+
+      /* ── STATS GRID ── */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.4s ease both;
+      }
+      .stat-card:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .stat-card:nth-child(2) {
+        animation-delay: 0.06s;
+      }
+      .stat-card:nth-child(3) {
+        animation-delay: 0.12s;
+      }
+      .stat-card:nth-child(4) {
+        animation-delay: 0.18s;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        opacity: 0.06;
+      }
+      .stat-card.green::before {
+        background: var(--green);
+      }
+      .stat-card.red::before {
+        background: var(--red);
+      }
+      .stat-card.amber::before {
+        background: var(--amber);
+      }
+      .stat-card.blue::before {
+        background: var(--blue);
+      }
+
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .stat-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .stat-icon.green {
+        background: var(--green-light);
+        color: var(--green-dark);
+      }
+      .stat-icon.red {
+        background: var(--red-light);
+        color: var(--red);
+      }
+      .stat-icon.amber {
+        background: var(--amber-light);
+        color: var(--amber);
+      }
+      .stat-icon.blue {
+        background: var(--blue-light);
+        color: var(--blue);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--slate-light);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .stat-value {
+        font-family: "Sora", sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--slate);
+        line-height: 1;
+      }
+      .stat-sub {
+        font-size: 12px;
+        color: var(--slate-light);
+        font-weight: 500;
+      }
+      .stat-sub strong {
+        color: var(--green-dark);
+        font-weight: 700;
+      }
+      .stat-sub strong.bad {
+        color: var(--red);
+      }
+
+      /* ── SECTION GRIDS ── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .full-col {
+        margin-bottom: 24px;
+      }
+
+      .section-card {
+        background: var(--card);
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+      .section-head {
+        padding: 18px 20px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+      }
+      .section-head h2 {
+        font-family: "Sora", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--slate);
+      }
+      .section-head .meta {
+        font-size: 12px;
+        color: var(--slate-light);
+        font-weight: 500;
+      }
+
+      /* ── DRIVER LEADERBOARD ── */
+      .driver-list {
+        padding: 8px 0;
+      }
+      .driver-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 20px;
+        transition: background 0.15s;
+        cursor: pointer;
+      }
+      .driver-row:hover {
+        background: #f8fafc;
+      }
+      .driver-rank {
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--slate-light);
+        width: 20px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .driver-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Sora", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .driver-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .driver-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--slate);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .driver-branch {
+        font-size: 11px;
+        color: var(--slate-light);
+        font-weight: 500;
+      }
+      .driver-score {
+        font-family: "Sora", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+      .score-good {
+        background: var(--green-light);
+        color: var(--green-dark);
+      }
+      .score-mid {
+        background: var(--amber-light);
+        color: #b45309;
+      }
+      .score-bad {
+        background: var(--red-light);
+        color: var(--red);
+      }
+      .driver-bar-wrap {
+        width: 60px;
+        height: 6px;
+        background: #f1f5f9;
+        border-radius: 3px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .driver-bar {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.8s ease;
+      }
+
+      /* ── RECENT ALERTS ── */
+      .alert-list {
+        padding: 8px 0;
+      }
+      .alert-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 20px;
+        border-bottom: 1px solid #f8fafc;
+        transition: background 0.15s;
+      }
+      .alert-row:last-child {
+        border-bottom: none;
+      }
+      .alert-row:hover {
+        background: #fef2f2;
+      }
+      .alert-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--red);
+        flex-shrink: 0;
+        margin-top: 4px;
+      }
+      .alert-dot.amber {
+        background: var(--amber);
+      }
+      .alert-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .alert-driver {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--slate);
+      }
+      .alert-detail {
+        font-size: 11px;
+        color: var(--slate-mid);
+        margin-top: 2px;
+      }
+      .alert-time {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--slate-light);
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+
+      /* ── TABLE ── */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--slate-light);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 10px 16px;
+        text-align: left;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border);
+      }
+      tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.15s;
+        cursor: pointer;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: #f8fafc;
+      }
+      td {
+        padding: 12px 16px;
+        font-size: 13px;
+        color: var(--slate-mid);
+        vertical-align: middle;
+      }
+      td.driver-cell {
+        font-weight: 700;
+        color: var(--slate);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 6px;
+      }
+      .pill-green {
+        background: var(--green-light);
+        color: var(--green-dark);
+      }
+      .pill-red {
+        background: var(--red-light);
+        color: var(--red);
+      }
+      .pill-amber {
+        background: var(--amber-light);
+        color: #b45309;
+      }
+      .pill-blue {
+        background: var(--blue-light);
+        color: var(--blue);
+      }
+
+      /* ── FILTERS ── */
+      .filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border);
+        background: #f8fafc;
+      }
+      .filter-bar input,
+      .filter-bar select {
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-family: inherit;
+        color: var(--slate);
+        background: var(--card);
+        outline: none;
+        transition: all 0.2s;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+      .filter-bar input:focus,
+      .filter-bar select:focus {
+        border-color: var(--green-mid);
+      }
+      .filter-bar input {
+        width: 200px;
+      }
+      .filter-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--slate-light);
+      }
+      .filter-select-wrap {
+        position: relative;
+      }
+      .filter-select-wrap::after {
+        content: "";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid var(--slate-light);
+        pointer-events: none;
+      }
+
+      /* ── PAGINATION ── */
+      .pagination {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        padding: 16px;
+      }
+      .pg-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        background: var(--card);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--slate-mid);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        font-family: inherit;
+      }
+      .pg-btn:hover {
+        border-color: var(--green-mid);
+        color: var(--green-dark);
+      }
+      .pg-btn.active {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+      }
+      .pg-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* ── DRAWER ── */
+      .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        z-index: 300;
+        display: none;
+        align-items: flex-end;
+        backdrop-filter: blur(2px);
+      }
+      .drawer-overlay.active {
+        display: flex;
+      }
+      .drawer {
+        background: var(--card);
+        width: 100%;
+        max-height: 85vh;
+        border-radius: 20px 20px 0 0;
+        padding: 0;
+        animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+      .drawer-handle {
+        width: 36px;
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        margin: 12px auto 0;
+      }
+      .drawer-head {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+      }
+      .drawer-head h3 {
+        font-family: "Sora", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .drawer-head p {
+        font-size: 12px;
+        color: var(--slate-light);
+        margin-top: 2px;
+      }
+      .drawer-body {
+        padding: 16px 20px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .drawer-resp-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 13px;
+      }
+      .drawer-resp-row:last-child {
+        border-bottom: none;
+      }
+      .drawer-q {
+        flex: 1;
+        color: var(--slate-mid);
+        font-weight: 500;
+      }
+      .drawer-a {
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .drawer-note {
+        font-size: 11px;
+        color: var(--slate-light);
+        font-style: italic;
+        margin-top: 3px;
+      }
+      .drawer-close-btn {
+        width: 100%;
+        margin: 16px 0 8px;
+        padding: 14px;
+        background: #f1f5f9;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        color: var(--slate-mid);
+      }
+
+      /* ── EMPTY / LOADER ── */
+      .spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid var(--green-light);
+        border-top-color: var(--green);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin: 40px auto;
+      }
+      .empty-msg {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--slate-light);
+        font-size: 14px;
+      }
+
+      /* ── PAGE VISIBILITY ── */
+      .page-section {
+        display: none;
+      }
+      .page-section.active {
+        display: block;
+      }
+
+      /* ── SIDEBAR OVERLAY ── */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 190;
+        backdrop-filter: blur(2px);
+      }
+
+      /* ── MANAGEMENT PANELS ── */
+      .mgmt-tabs {
+        display: flex;
+        gap: 8px;
+        padding: 16px 20px;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border);
+      }
+      .mgmt-tab {
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--slate-mid);
+        cursor: pointer;
+      }
+      .mgmt-tab.active {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green);
+      }
+      .mgmt-form-inline {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        background: #fff;
+      }
+      .mgmt-form-inline input,
+      .mgmt-form-inline select {
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-size: 13px;
+        outline: none;
+        background: #fff;
+        color: var(--slate);
+        font-family: inherit;
+      }
+      .mgmt-form-inline input:focus,
+      .mgmt-form-inline select:focus {
+        border-color: var(--green-mid);
+      }
+      .mgmt-btn-add {
+        background: var(--green);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .mgmt-btn-add:hover {
+        background: var(--green-dark);
+      }
+      .action-btn-group {
+        display: flex;
+        gap: 6px;
+      }
+      .btn-action {
+        border: none;
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn-edit {
+        background: var(--blue-light);
+        color: var(--blue);
+      }
+      .btn-delete {
+        background: var(--red-light);
+        color: var(--red);
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 900px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 700px) {
+        :root {
+          --sidebar-w: 240px;
+        }
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .sidebar-overlay {
+          display: block;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s;
+        }
+        .sidebar-overlay.active {
+          opacity: 1;
+          pointer-events: all;
+        }
+        .main {
+          margin-left: 0;
+        }
+        .hamburger {
+          display: flex;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        .content {
+          padding: 16px;
+        }
+
+        .filter-bar {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 12px !important;
+          padding: 16px !important;
+        }
+        .filter-label {
+          width: 100%;
+          margin-bottom: -4px;
+        }
+        .filter-bar input[type="text"],
+        .filter-select-wrap,
+        .filter-select-wrap select {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 100% !important;
+          flex: none !important;
+          display: block !important;
+          box-sizing: border-box !important;
+        }
+
+        .filter-bar input[type="date"] {
+          -webkit-appearance: none !important;
+          appearance: none !important;
+          min-height: 40px !important;
+          width: 100% !important;
+          background-color: var(--card) !important;
+          position: relative;
+          box-sizing: border-box !important;
+        }
+        .filter-bar input[type="date"]:not(:focus):invalid::before {
+          content: "📅 Select Date";
+          position: absolute;
+          left: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--slate-light);
+          font-size: 13px;
+          pointer-events: none;
+          width: 100%;
+        }
+
+        .mgmt-form-inline {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+        }
+        .mgmt-form-inline input,
+        .mgmt-form-inline select,
+        .mgmt-btn-add {
+          width: 100%;
+        }
+
+        .stat-value {
+          font-size: 24px;
+        }
+        table thead th:nth-child(4),
+        table thead th:nth-child(5),
+        table tbody td:nth-child(4),
+        table tbody td:nth-child(5) {
+          display: none;
+        }
+      }
+      @media (max-width: 400px) {
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="sidebar-overlay"
+      id="sidebarOverlay"
+      onclick="closeSidebar()"
+    ></div>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <div class="logo-title">Driver Rating</div>
+        <div class="logo-sub">Admin Dashboard</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <button class="nav-item active" onclick="showPage('dashboard')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
+          </svg>
+          Dashboard
+        </button>
+        <button class="nav-item" onclick="showPage('submissions')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+          All Submissions
+        </button>
+
+        <div class="nav-section-label" style="margin-top: 8px">Analysis</div>
+        <button class="nav-item" onclick="showPage('drivers')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          Driver Scores
+        </button>
+        <button class="nav-item" onclick="showPage('alerts')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+          Low-Rating Alerts
+          <span class="badge" id="alertBadge">0</span>
+        </button>
+
+        <div
+          class="nav-section-label"
+          id="settingsLabel"
+          style="margin-top: 8px"
+        >
+          Settings
+        </div>
+        <button class="nav-item" onclick="showPage('management')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Data Management
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+          />
+        </svg>
+        Connected to Supabase
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="page-title" id="pageTitle">Dashboard</div>
+        </div>
+        <div class="topbar-right">
+          <div class="date-badge" id="dateBadge"></div>
+          <button class="refresh-btn" id="refreshBtn" onclick="refreshAll()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div id="page-dashboard" class="page-section active">
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card green">
+              <div class="stat-icon green">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="stat-label">Total Submissions</div>
+                <div class="stat-value" id="statTotal">—</div>
+                <div class="stat-sub" id="statTotalSub">Loading…</div>
+              </div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-icon red">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="stat-label">Low-Rating Alerts</div>
+                <div class="stat-value" id="statAlerts">—</div>
+                <div class="stat-sub" id="statAlertsSub">Loading…</div>
+              </div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-icon amber">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="stat-label">Avg Overall Score</div>
+                <div class="stat-value" id="statAvg">—</div>
+                <div class="stat-sub" id="statAvgSub">Across all drivers</div>
+              </div>
+            </div>
+            <div class="stat-card blue">
+              <div class="stat-icon blue">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="stat-label">Active Drivers</div>
+                <div class="stat-value" id="statDrivers">—</div>
+                <div class="stat-sub" id="statDriversSub">Loading…</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="section-card">
+              <div class="section-head">
+                <h2>🏆 Driver Leaderboard</h2>
+                <span class="meta">By avg score</span>
+              </div>
+              <div class="driver-list" id="leaderboardList">
+                <div class="spinner"></div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-head">
+                <h2>⚠️ Recent Alerts</h2>
+                <span class="meta">Low ratings flagged</span>
+              </div>
+              <div class="alert-list" id="alertList">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="full-col">
+            <div class="section-card">
+              <div class="section-head">
+                <h2>📍 Branch Summary</h2>
+                <span class="meta">Submissions per branch</span>
+              </div>
+              <div class="table-wrap">
+                <table id="branchTable">
+                  <thead>
+                    <tr>
+                      <th>Branch</th>
+                      <th>Submissions</th>
+                      <th>Avg Score</th>
+                      <th>Alerts</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="branchTableBody">
+                    <tr>
+                      <td colspan="5"><div class="spinner"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="page-submissions" class="page-section">
+          <div class="section-card">
+            <div class="filter-bar">
+              <span class="filter-label">Filter:</span>
+              <input
+                type="text"
+                id="filterSearch"
+                placeholder="Driver / Submitter…"
+                oninput="filterTable()"
+              />
+              <div class="filter-select-wrap">
+                <select id="filterBranch" onchange="filterTable()">
+                  <option value="">All Branches</option>
+                </select>
+              </div>
+              <div class="filter-select-wrap">
+                <select id="filterAlert" onchange="filterTable()">
+                  <option value="">All</option>
+                  <option value="alert">⚠️ Alerts only</option>
+                  <option value="ok">✅ OK only</option>
+                </select>
+              </div>
+              <input
+                type="date"
+                id="filterDate"
+                onchange="filterTable()"
+                required
+              />
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Driver</th>
+                    <th>Branch</th>
+                    <th>Trip Date</th>
+                    <th>Submitted By</th>
+                    <th>Submitted At</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="submissionsTableBody">
+                  <tr>
+                    <td colspan="6"><div class="spinner"></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+          </div>
+        </div>
+
+        <div id="page-drivers" class="page-section">
+          <div class="section-card">
+            <div class="section-head">
+              <h2>Driver Performance Scores</h2>
+              <span class="meta" id="driversCount">—</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Driver</th>
+                    <th>Trips Rated</th>
+                    <th>Avg Score</th>
+                    <th>Alerts</th>
+                    <th>Last Rating</th>
+                  </tr>
+                </thead>
+                <tbody id="driversTableBody">
+                  <tr>
+                    <td colspan="6"><div class="spinner"></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="page-alerts" class="page-section">
+          <div class="section-card">
+            <div class="section-head">
+              <h2>⚠️ All Low-Rating Alerts</h2>
+              <span class="meta" id="alertsCount">—</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Driver</th>
+                    <th>Branch</th>
+                    <th>Trip Date</th>
+                    <th>Flagged Issues</th>
+                    <th>Submitted By</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="alertsTableBody">
+                  <tr>
+                    <td colspan="6"><div class="spinner"></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="page-management" class="page-section">
+          <div class="section-card">
+            <div class="mgmt-tabs">
+              <button
+                class="mgmt-tab active"
+                id="tab-questions"
+                onclick="switchMgmtTab('questions')"
+              >
+                📝 Questions
+              </button>
+              <button
+                class="mgmt-tab"
+                id="tab-drivers"
+                onclick="switchMgmtTab('drivers')"
+              >
+                🚗 Drivers
+              </button>
+              <button
+                class="mgmt-tab"
+                id="tab-branches"
+                onclick="switchMgmtTab('branches')"
+              >
+                📍 Branches
+              </button>
+            </div>
+
+            <div id="mgmt-sec-questions" class="mgmt-section-content">
+              <div class="mgmt-form-inline">
+                <input type="hidden" id="mgmtQuestionId" value="" />
+                <input
+                  type="text"
+                  id="mgmtQuestionText"
+                  placeholder="Enter question text..."
+                  style="flex: 2"
+                />
+
+                <div class="filter-select-wrap">
+                  <select id="mgmtQuestionType">
+                    <option value="binary">🔘 binary (OKAY/NOT OKAY)</option>
+                    <option value="score">⭐️ score (1-5)</option>
+                  </select>
+                </div>
+
+                <input
+                  type="number"
+                  id="mgmtQuestionOrder"
+                  placeholder="Order (e.g., 1)"
+                  style="width: 90px"
+                />
+                <button
+                  class="mgmt-btn-add"
+                  id="btnSaveQuestion"
+                  onclick="saveQuestion()"
+                >
+                  Add Question
+                </button>
+                <button
+                  class="mgmt-tab"
+                  id="btnCancelQuestionEdit"
+                  onclick="cancelQuestionEdit()"
+                  style="display: none"
+                >
+                  Cancel
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 80px">Order</th>
+                      <th>Question Text</th>
+                      <th style="width: 120px">Type</th>
+                      <th style="width: 120px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mgmtQuestionsTableBody">
+                    <tr>
+                      <td colspan="4"><div class="spinner"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div
+              id="mgmt-sec-drivers"
+              class="mgmt-section-content"
+              style="display: none"
+            >
+              <div class="mgmt-form-inline">
+                <input
+                  type="text"
+                  id="mgmtDriverName"
+                  placeholder="Enter driver's full name..."
+                  style="flex: 1"
+                />
+                <button class="mgmt-btn-add" onclick="addDriver()">
+                  Add New Driver
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 80px">#</th>
+                      <th>Driver Name</th>
+                      <th style="width: 100px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mgmtDriversTableBody">
+                    <tr>
+                      <td colspan="3"><div class="spinner"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div
+              id="mgmt-sec-branches"
+              class="mgmt-section-content"
+              style="display: none"
+            >
+              <div class="mgmt-form-inline">
+                <input
+                  type="text"
+                  id="mgmtBranchName"
+                  placeholder="Enter unique branch name..."
+                  style="flex: 1"
+                />
+                <button class="mgmt-btn-add" onclick="addBranch()">
+                  Add New Branch
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Branch Location Name</th>
+                      <th style="width: 100px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mgmtBranchesTableBody">
+                    <tr>
+                      <td colspan="2"><div class="spinner"></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()">
+      <div class="drawer" onclick="event.stopPropagation()">
+        <div class="drawer-handle"></div>
+        <div class="drawer-head">
+          <h3 id="drawerTitle">Submission Detail</h3>
+          <p id="drawerMeta"></p>
+        </div>
+        <div class="drawer-body">
+          <div id="drawerBody"></div>
+          <button class="drawer-close-btn" onclick="closeDrawer()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const currentUser = JSON.parse(localStorage.getItem("loggedUser"));
+
+      if (!currentUser) {
+        window.location.href = "login.html";
+      }
+
+      const userRole = currentUser.role || "user";
+
+      window.addEventListener("DOMContentLoaded", () => {
+        if (userRole !== "admin") {
+          // Hide Settings text
+          const settingsLabel = document.getElementById("settingsLabel");
+
+          if (settingsLabel) {
+            settingsLabel.style.display = "none";
+          }
+
+          // Hide Data Management menu
+          document.querySelectorAll(".nav-item").forEach((item) => {
+            if (item.innerText.includes("Data Management")) {
+              item.style.display = "none";
+            }
+          });
+
+          // Hide management page
+          const managementPage = document.getElementById("page-management");
+
+          if (managementPage) {
+            managementPage.style.display = "none";
+          }
+        }
+      });
+      const SUPABASE_URL = "https://vioupfkhpdyfbuatjtxr.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpb3VwZmtocGR5ZmJ1YXRqdHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTU0OTcsImV4cCI6MjA5MjkzMTQ5N30.KpQ3syRkSzCyPgkbeVX6OYY8pu13QshL-iQ2F48Vevk";
+      const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      let allRatings = [],
+        allDrivers = {},
+        allQuestions = [],
+        allBranches = [];
+      let filteredRows = [];
+      let currentPage = 1;
+      const PAGE_SIZE = 15;
+      const AVATAR_COLORS = [
+        "#10b981",
+        "#3b82f6",
+        "#f59e0b",
+        "#8b5cf6",
+        "#ef4444",
+        "#06b6d4",
+        "#ec4899",
+        "#84cc16",
+      ];
+      let currentMgmtTab = "questions";
+
+      // ── HELPERS ──
+      // Updated to catch "NOT OK" matching your UI button image
+      function isBad(val) {
+        return (
+          val === "1" || val === "2" || val === "NOT OKAY" || val === "NOT OK"
+        );
+      }
+
+      function avgScore(responses) {
+        if (!responses) return null;
+        const vals = Object.values(responses)
+          .map((r) => r.answer)
+          .filter(
+            (a) =>
+              a && a !== "" && a !== "NOT OKAY" && a !== "NOT OK" && a !== "OK",
+          );
+        if (!vals.length) return null;
+        return (
+          vals.reduce((s, v) => s + parseFloat(v), 0) / vals.length
+        ).toFixed(2);
+      }
+
+      function hasAlert(responses) {
+        if (!responses) return false;
+        return Object.values(responses).some((r) => isBad(r.answer));
+      }
+      function scoreClass(v) {
+        if (v === null) return "";
+        if (v >= 4) return "score-good";
+        if (v >= 3) return "score-mid";
+        return "score-bad";
+      }
+      function pillClass(v) {
+        if (v === null) return "pill-blue";
+        if (v >= 4) return "pill-green";
+        if (v >= 3) return "pill-amber";
+        return "pill-red";
+      }
+      function timeAgo(iso) {
+        const diff = Date.now() - new Date(iso);
+        const m = Math.floor(diff / 60000);
+        if (m < 1) return "just now";
+        if (m < 60) return `${m}m ago`;
+        const h = Math.floor(m / 60);
+        if (h < 24) return `${h}h ago`;
+        return `${Math.floor(h / 24)}d ago`;
+      }
+      function initials(name) {
+        return (name || "?")
+          .split(" ")
+          .slice(0, 2)
+          .map((w) => w[0])
+          .join("")
+          .toUpperCase();
+      }
+      function avatarColor(name) {
+        return AVATAR_COLORS[(name || "").charCodeAt(0) % AVATAR_COLORS.length];
+      }
+
+      async function loadAll() {
+        const [ratingRes, driverRes, questionRes, branchRes] =
+          await Promise.all([
+            db
+              .from("ratings")
+              .select("*")
+              .order("created_at", { ascending: false }),
+            db.from("drivers").select("id, name").order("name"),
+            db.from("questions").select("*").order("sort_order"),
+            db.from("branches").select("branch_name").order("branch_name"),
+          ]);
+        allRatings = ratingRes.data || [];
+        allQuestions = questionRes.data || [];
+        allBranches = branchRes.data || [];
+
+        allDrivers = {};
+        const driverRawList = driverRes.data || [];
+        driverRawList.forEach((d) => (allDrivers[d.id] = d.name));
+
+        const fb = document.getElementById("filterBranch");
+        fb.innerHTML =
+          '<option value="">All Branches</option>' +
+          allBranches
+            .map(
+              (b) =>
+                `<option value="${b.branch_name}">${b.branch_name}</option>`,
+            )
+            .join("");
+
+        renderMgmtTables(driverRawList);
+      }
+
+      async function refreshAll() {
+        const btn = document.getElementById("refreshBtn");
+        btn.classList.add("spinning");
+        await loadAll();
+        renderCurrentPage();
+        btn.classList.remove("spinning");
+      }
+
+      function renderCurrentPage() {
+        const active = document.querySelector(".page-section.active");
+        const id = active ? active.id : "page-dashboard";
+        if (id === "page-dashboard") renderDashboard();
+        else if (id === "page-submissions") {
+          filteredRows = [...allRatings];
+          filterTable();
+        } else if (id === "page-drivers") renderDrivers();
+        else if (id === "page-alerts") renderAlerts();
+      }
+
+      function renderDashboard() {
+        const total = allRatings.length;
+        const alertCount = allRatings.filter((r) =>
+          hasAlert(r.responses),
+        ).length;
+        const driverIds = [...new Set(allRatings.map((r) => r.driver_id))];
+        const allScores = allRatings
+          .map((r) => avgScore(r.responses))
+          .filter((v) => v !== null)
+          .map(Number);
+        const overallAvg = allScores.length
+          ? (allScores.reduce((a, b) => a + b, 0) / allScores.length).toFixed(2)
+          : "—";
+
+        document.getElementById("statTotal").textContent = total;
+        document.getElementById("statTotalSub").textContent = `${
+          allRatings.filter((r) => {
+            const d = new Date(r.created_at);
+            const now = new Date();
+            return (
+              d.getMonth() === now.getMonth() &&
+              d.getFullYear() === now.getFullYear()
+            );
+          }).length
+        } this month`;
+
+        document.getElementById("statAlerts").textContent = alertCount;
+        document.getElementById("statAlertsSub").innerHTML =
+          `<strong class="bad">${((alertCount / Math.max(total, 1)) * 100).toFixed(0)}%</strong> of all submissions`;
+
+        document.getElementById("statAvg").textContent =
+          overallAvg === "—" ? "—" : `${overallAvg}/5`;
+        document.getElementById("statDrivers").textContent = driverIds.length;
+        document.getElementById("statDriversSub").textContent =
+          `Out of ${Object.keys(allDrivers).length} total`;
+
+        document.getElementById("alertBadge").textContent = alertCount;
+        renderLeaderboard();
+        renderAlertList();
+        renderBranchTable();
+      }
+
+      function renderLeaderboard() {
+        const driverStats = {};
+        allRatings.forEach((r) => {
+          const name = allDrivers[r.driver_id] || "Unknown";
+          if (!driverStats[name])
+            driverStats[name] = { scores: [], alerts: 0, branch: r.branch };
+          const s = avgScore(r.responses);
+          if (s !== null) driverStats[name].scores.push(Number(s));
+          if (hasAlert(r.responses)) driverStats[name].alerts++;
+        });
+        const sorted = Object.entries(driverStats)
+          .map(([name, d]) => ({
+            name,
+            avg: d.scores.length
+              ? d.scores.reduce((a, b) => a + b, 0) / d.scores.length
+              : 0,
+            count: d.scores.length,
+            branch: d.branch,
+          }))
+          .sort((a, b) => b.avg - a.avg)
+          .slice(0, 8);
+
+        const el = document.getElementById("leaderboardList");
+        if (!sorted.length) {
+          el.innerHTML = '<div class="empty-msg">No data yet.</div>';
+          return;
+        }
+        el.innerHTML = sorted
+          .map(
+            (d, i) => `
+      <div class="driver-row">
+        <div class="driver-rank">${i + 1}</div>
+        <div class="driver-avatar" style="background:${avatarColor(d.name)}">${initials(d.name)}</div>
+        <div class="driver-info">
+          <div class="driver-name">${d.name}</div>
+          <div class="driver-branch">${d.count} trip${d.count !== 1 ? "s" : ""} · ${d.branch || "—"}</div>
+        </div>
+        <div class="driver-bar-wrap"><div class="driver-bar" style="width:${(d.avg / 5) * 100}%;background:${d.avg >= 4 ? "var(--green)" : d.avg >= 3 ? "var(--amber)" : "var(--red)"}"></div></div>
+        <div class="driver-score ${scoreClass(d.avg)}">${d.avg.toFixed(1)}</div>
+      </div>`,
+          )
+          .join("");
+      }
+
+      function renderAlertList() {
+        const alerts = allRatings
+          .filter((r) => hasAlert(r.responses))
+          .slice(0, 6);
+        const el = document.getElementById("alertList");
+        if (!alerts.length) {
+          el.innerHTML =
+            '<div class="empty-msg">🎉 No alerts! All ratings are positive.</div>';
+          return;
+        }
+        el.innerHTML = alerts
+          .map((r) => {
+            const issues = Object.values(r.responses || {}).filter((resp) =>
+              isBad(resp.answer),
+            ).length;
+            return `<div class="alert-row">
+        <div class="alert-dot"></div>
+        <div class="alert-info">
+          <div class="alert-driver">${allDrivers[r.driver_id] || "Unknown"}</div>
+          <div class="alert-detail">${issues} issue${issues !== 1 ? "s" : ""} · ${r.branch} · by ${r.submitted_by}</div>
+        </div>
+        <div class="alert-time">${timeAgo(r.created_at)}</div>
+      </div>`;
+          })
+          .join("");
+      }
+
+      function renderBranchTable() {
+        const stats = {};
+        allRatings.forEach((r) => {
+          const b = r.branch || "Unknown";
+          if (!stats[b]) stats[b] = { count: 0, scores: [], alerts: 0 };
+          stats[b].count++;
+          const s = avgScore(r.responses);
+          if (s !== null) stats[b].scores.push(Number(s));
+          if (hasAlert(r.responses)) stats[b].alerts++;
+        });
+        const rows = Object.entries(stats).sort(
+          (a, b) => b[1].count - a[1].count,
+        );
+        const tbody = document.getElementById("branchTableBody");
+        if (!rows.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="5"><div class="empty-msg">No data.</div></td></tr>';
+          return;
+        }
+        tbody.innerHTML = rows
+          .map(([branch, d]) => {
+            const avg = d.scores.length
+              ? (d.scores.reduce((a, b) => a + b, 0) / d.scores.length).toFixed(
+                  2,
+                )
+              : null;
+            const status =
+              d.alerts === 0
+                ? "pill-green"
+                : d.alerts < 3
+                  ? "pill-amber"
+                  : "pill-red";
+            const statusText =
+              d.alerts === 0
+                ? "✅ Good"
+                : d.alerts < 3
+                  ? "⚠️ Watch"
+                  : "🔴 Critical";
+            return `<tr>
+        <td class="driver-cell">${branch}</td>
+        <td>${d.count}</td>
+        <td><span class="pill ${avg === null ? "pill-blue" : pillClass(avg)}">${avg || "N/A"}</span></td>
+        <td>${d.alerts === 0 ? "—" : `<span class="pill pill-red">${d.alerts}</span>`}</td>
+        <td><span class="pill ${status}">${statusText}</span></td>
+      </tr>`;
+          })
+          .join("");
+      }
+
+      function filterTable() {
+        const search = document
+          .getElementById("filterSearch")
+          .value.toLowerCase();
+        const branch = document.getElementById("filterBranch").value;
+        const alertFilter = document.getElementById("filterAlert").value;
+        const dateFilter = document.getElementById("filterDate").value;
+
+        filteredRows = allRatings.filter((r) => {
+          const driverName = (allDrivers[r.driver_id] || "").toLowerCase();
+          const submittedBy = (r.submitted_by || "").toLowerCase();
+          if (
+            search &&
+            !driverName.includes(search) &&
+            !submittedBy.includes(search)
+          )
+            return false;
+          if (branch && r.branch !== branch) return false;
+          if (alertFilter === "alert" && !hasAlert(r.responses)) return false;
+          if (alertFilter === "ok" && hasAlert(r.responses)) return false;
+          if (dateFilter && r.rating_date !== dateFilter) return false;
+          return true;
+        });
+        currentPage = 1;
+        renderSubmissionsTable();
+      }
+
+      function renderSubmissionsTable() {
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const rows = filteredRows.slice(start, start + PAGE_SIZE);
+        const tbody = document.getElementById("submissionsTableBody");
+        if (!rows.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="6"><div class="empty-msg">No submissions match the filter.</div></td></tr>';
+          renderPagination();
+          return;
+        }
+
+        tbody.innerHTML = rows
+          .map((r) => {
+            const isAlert = hasAlert(r.responses);
+            return `<tr onclick="openDrawer('${r.id}')">
+        <td class="driver-cell">${allDrivers[r.driver_id] || "Unknown"}</td>
+        <td>${r.branch || "—"}</td>
+        <td>${r.rating_date || "—"}</td>
+        <td>${r.submitted_by || "—"}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:12px">${new Date(r.created_at).toLocaleString()}</td>
+        <td><span class="pill ${isAlert ? "pill-red" : "pill-green"}">${isAlert ? "⚠️ Alert" : "✅ OK"}</span></td>
+      </tr>`;
+          })
+          .join("");
+        renderPagination();
+      }
+
+      function renderPagination() {
+        const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
+        const el = document.getElementById("pagination");
+        if (totalPages <= 1) {
+          el.innerHTML = "";
+          return;
+        }
+        let html = `<button class="pg-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>‹</button>`;
+        for (let i = 1; i <= totalPages; i++) {
+          if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+            html += `<button class="pg-btn ${i === currentPage ? "active" : ""}" onclick="goPage(${i})">${i}</button>`;
+          } else if (Math.abs(i - currentPage) === 2) {
+            html += `<span style="color:var(--slate-light);font-size:13px">…</span>`;
+          }
+        }
+        html += `<button class="pg-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>›</button>`;
+        el.innerHTML = html;
+      }
+
+      function goPage(p) {
+        const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
+        if (p < 1 || p > totalPages) return;
+        currentPage = p;
+        renderSubmissionsTable();
+      }
+
+      function openDrawer(id) {
+        const r = allRatings.find((x) => x.id === id);
+        if (!r) return;
+        document.getElementById("drawerTitle").textContent =
+          `${allDrivers[r.driver_id] || "Unknown"}`;
+        document.getElementById("drawerMeta").textContent =
+          `${r.branch} · ${r.rating_date} · by ${r.submitted_by}`;
+        const body = document.getElementById("drawerBody");
+        if (!allQuestions.length || !r.responses) {
+          body.innerHTML = '<div class="empty-msg">No response details.</div>';
+        } else {
+          body.innerHTML = allQuestions
+            .map((q) => {
+              const resp = (r.responses || {})[q.id];
+              if (!resp) return "";
+
+              let answerHTML = "";
+              // Support UI transforms dynamically based on binary vs score question models
+              if (q.question_type === "binary") {
+                const isNegative = isBad(resp.answer);
+                const displayLabel = isNegative ? "❌ NOT OKAY" : "🟢 OKAY";
+                answerHTML = `<span class="pill ${isNegative ? "pill-red" : "pill-green"}">${displayLabel}</span>`;
+              } else {
+                const bad = isBad(resp.answer);
+                answerHTML = `<span style="font-weight:700; color:${bad ? "var(--red)" : "var(--green-dark)"}">${resp.answer || "Skipped"}</span>`;
+              }
+
+              return `<div class="drawer-resp-row">
+          <div class="drawer-q">${q.question_text}${resp.note ? `<div class="drawer-note">📝 ${resp.note}</div>` : ""}</div>
+          <div class="drawer-a">${answerHTML}</div>
+        </div>`;
+            })
+            .join("");
+        }
+        document.getElementById("drawerOverlay").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeDrawer() {
+        document.getElementById("drawerOverlay").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      function renderDrivers() {
+        const driverStats = {};
+        allRatings.forEach((r) => {
+          const id = r.driver_id;
+          if (!driverStats[id])
+            driverStats[id] = { scores: [], alerts: 0, lastDate: null };
+          const s = avgScore(r.responses);
+          if (s !== null) driverStats[id].scores.push(Number(s));
+          if (hasAlert(r.responses)) driverStats[id].alerts++;
+          if (
+            !driverStats[id].lastDate ||
+            r.created_at > driverStats[id].lastDate
+          )
+            driverStats[id].lastDate = r.created_at;
+        });
+        const sorted = Object.entries(driverStats)
+          .map(([id, d]) => ({
+            id,
+            name: allDrivers[id] || "Unknown",
+            avg: d.scores.length
+              ? d.scores.reduce((a, b) => a + b, 0) / d.scores.length
+              : 0,
+            count: d.scores.length,
+            alerts: d.alerts,
+            lastDate: d.lastDate,
+          }))
+          .sort((a, b) => b.avg - a.avg);
+
+        document.getElementById("driversCount").textContent =
+          `${sorted.length} drivers`;
+        const tbody = document.getElementById("driversTableBody");
+        if (!sorted.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="6"><div class="empty-msg">No data.</div></td></tr>';
+          return;
+        }
+        tbody.innerHTML = sorted
+          .map(
+            (d, i) => `<tr>
+      <td style="color:var(--slate-light);font-family:'DM Mono',monospace;font-size:12px">${i + 1}</td>
+      <td class="driver-cell" style="display:flex;align-items:center;gap:8px">
+        <div class="driver-avatar" style="background:${avatarColor(d.name)};width:28px;height:28px;border-radius:8px;font-size:11px">${initials(d.name)}</div>
+        ${d.name}
+      </td>
+      <td>${d.count}</td>
+      <td><span class="pill ${pillClass(d.avg)}">${d.avg.toFixed(2)} / 5</span></td>
+      <td>${d.alerts === 0 ? "—" : `<span class="pill pill-red">${d.alerts}</span>`}</td>
+      <td style="font-size:12px;color:var(--slate-light)">${d.lastDate ? new Date(d.lastDate).toLocaleDateString() : "—"}</td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      function renderAlerts() {
+        const alerts = allRatings.filter((r) => hasAlert(r.responses));
+        document.getElementById("alertsCount").textContent =
+          `${alerts.length} alerts`;
+        document.getElementById("alertBadge").textContent = alerts.length;
+        const tbody = document.getElementById("alertsTableBody");
+        if (!alerts.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="6"><div class="empty-msg">🎉 No low-rating alerts found.</div></td></tr>';
+          return;
+        }
+        tbody.innerHTML = alerts
+          .map((r) => {
+            const issues = Object.entries(r.responses || {})
+              .filter(([, resp]) => isBad(resp.answer))
+              .map(([qid, resp]) => {
+                const q = allQuestions.find(
+                  (x) => String(x.id) === String(qid),
+                );
+                return `${q ? q.question_text.substring(0, 30) + "…" : "Q" + qid}: <strong>${resp.answer}</strong>`;
+              });
+            return `<tr onclick="openDrawer('${r.id}')">
+        <td class="driver-cell">${allDrivers[r.driver_id] || "Unknown"}</td>
+        <td>${r.branch || "—"}</td>
+        <td>${r.rating_date || "—"}</td>
+        <td style="font-size:11px;color:var(--red);max-width:200px">${issues.join("<br>")}</td>
+        <td>${r.submitted_by || "—"}</td>
+        <td style="font-size:12px;color:var(--slate-light)">${timeAgo(r.created_at)}</td>
+      </tr>`;
+          })
+          .join("");
+      }
+
+      function switchMgmtTab(tabName) {
+        currentMgmtTab = tabName;
+        document
+          .querySelectorAll(".mgmt-tab")
+          .forEach((el) => el.classList.remove("active"));
+        document
+          .querySelectorAll(".mgmt-section-content")
+          .forEach((el) => (el.style.display = "none"));
+
+        document.getElementById(`tab-${tabName}`).classList.add("active");
+        document.getElementById(`mgmt-sec-${tabName}`).style.display = "block";
+      }
+
+      function renderMgmtTables(driverRawList) {
+        // 1. Render Questions Table with Type Column updates
+        const qTbody = document.getElementById("mgmtQuestionsTableBody");
+        if (!allQuestions.length) {
+          qTbody.innerHTML =
+            '<tr><td colspan="4"><div class="empty-msg">No data inside questions table.</div></td></tr>';
+        } else {
+          qTbody.innerHTML = allQuestions
+            .map(
+              (q) => `
+        <tr>
+          <td style="font-family:'DM Mono', monospace; font-weight:700">${q.sort_order}</td>
+          <td>${q.question_text}</td>
+          <td><span class="pill ${q.question_type === "binary" ? "pill-blue" : "pill-green"}">${q.question_type || "score"}</span></td>
+          <td>
+            <div class="action-btn-group">
+              <button class="btn-action btn-edit" onclick="initEditQuestion('${q.id}', '${q.question_text.replace(/'/g, "\\'")}', ${q.sort_order}, '${q.question_type || "score"}')">Edit</button>
+              <button class="btn-action btn-delete" onclick="deleteQuestion('${q.id}')">Delete</button>
+            </div>
+          </td>
+        </tr>`,
+            )
+            .join("");
+        }
+
+        // 2. Render Drivers Table (# 1,2,3...)
+        const dTbody = document.getElementById("mgmtDriversTableBody");
+        if (!driverRawList || !driverRawList.length) {
+          dTbody.innerHTML =
+            '<tr><td colspan="3"><div class="empty-msg">No entries in drivers list.</div></td></tr>';
+        } else {
+          dTbody.innerHTML = driverRawList
+            .map(
+              (d, index) => `
+        <tr>
+          <td style="font-family:'DM Mono', monospace; font-weight:700; color: var(--slate-mid);"># ${index + 1}</td>
+          <td class="driver-cell">${d.name}</td>
+          <td>
+            <button class="btn-action btn-delete" onclick="deleteDriver('${d.id}')">Delete</button>
+          </td>
+        </tr>`,
+            )
+            .join("");
+        }
+
+        // 3. Render Branches Table
+        const bTbody = document.getElementById("mgmtBranchesTableBody");
+        if (!allBranches.length) {
+          bTbody.innerHTML =
+            '<tr><td colspan="2"><div class="empty-msg">No entries in branch data list.</div></td></tr>';
+        } else {
+          bTbody.innerHTML = allBranches
+            .map(
+              (b) => `
+        <tr>
+          <td class="driver-cell">📍 ${b.branch_name}</td>
+          <td>
+            <button class="btn-action btn-delete" onclick="deleteBranch('${b.branch_name.replace(/'/g, "\\'")}')">Delete</button>
+          </td>
+        </tr>`,
+            )
+            .join("");
+        }
+      }
+
+      function initEditQuestion(id, text, order, type) {
+        document.getElementById("mgmtQuestionId").value = id;
+        document.getElementById("mgmtQuestionText").value = text;
+        document.getElementById("mgmtQuestionOrder").value = order;
+        document.getElementById("mgmtQuestionType").value = type || "score";
+        document.getElementById("btnSaveQuestion").textContent =
+          "Update Question";
+        document.getElementById("btnCancelQuestionEdit").style.display =
+          "inline-block";
+      }
+
+      function cancelQuestionEdit() {
+        document.getElementById("mgmtQuestionId").value = "";
+        document.getElementById("mgmtQuestionText").value = "";
+        document.getElementById("mgmtQuestionOrder").value = "";
+        document.getElementById("mgmtQuestionType").value = "binary";
+        document.getElementById("btnSaveQuestion").textContent = "Add Question";
+        document.getElementById("btnCancelQuestionEdit").style.display = "none";
+      }
+
+      async function saveQuestion() {
+        const id = document.getElementById("mgmtQuestionId").value;
+        const text = document.getElementById("mgmtQuestionText").value.trim();
+        const orderNum = parseInt(
+          document.getElementById("mgmtQuestionOrder").value,
+        );
+        const typeStr = document.getElementById("mgmtQuestionType").value;
+
+        if (!text || isNaN(orderNum)) {
+          alert("Please supply text and sort configuration code.");
+          return;
+        }
+
+        if (id) {
+          const { error } = await db
+            .from("questions")
+            .update({
+              question_text: text,
+              sort_order: orderNum,
+              question_type: typeStr,
+            })
+            .eq("id", id);
+          if (error) alert("Error modifying row: " + error.message);
+        } else {
+          const { error } = await db.from("questions").insert([
+            {
+              question_text: text,
+              sort_order: orderNum,
+              question_type: typeStr,
+            },
+          ]);
+          if (error) alert("Error saving row: " + error.message);
+        }
+        cancelQuestionEdit();
+        await refreshAll();
+      }
+
+      async function deleteQuestion(id) {
+        if (
+          !confirm(
+            "Are you sure you want to delete this question configuration?",
+          )
+        )
+          return;
+        const { error } = await db.from("questions").delete().eq("id", id);
+        if (error)
+          alert("Could not drop reference constraints: " + error.message);
+        await refreshAll();
+      }
+
+      async function addDriver() {
+        const name = document.getElementById("mgmtDriverName").value.trim();
+        if (!name) {
+          alert("Please include driver's name");
+          return;
+        }
+        const { error } = await db.from("drivers").insert([{ name: name }]);
+        if (error) {
+          alert("Insert Error: " + error.message);
+        }
+        document.getElementById("mgmtDriverName").value = "";
+        await refreshAll();
+      }
+
+      async function deleteDriver(id) {
+        if (
+          !confirm(
+            "Are you sure you want to completely delete this driver configuration?",
+          )
+        )
+          return;
+        const { error } = await db.from("drivers").delete().eq("id", id);
+        if (error) alert("Error deleting element: " + error.message);
+        await refreshAll();
+      }
+
+      async function addBranch() {
+        const name = document.getElementById("mgmtBranchName").value.trim();
+        if (!name) {
+          alert("Please provide a valid branch tracking name.");
+          return;
+        }
+        const { error } = await db
+          .from("branches")
+          .insert([{ branch_name: name }]);
+        if (error) {
+          alert("Insert Error: " + error.message);
+        }
+        document.getElementById("mgmtBranchName").value = "";
+        await refreshAll();
+      }
+
+      async function deleteBranch(branchName) {
+        if (!confirm("Are you sure you want to clear this tracking branch?"))
+          return;
+        const { error } = await db
+          .from("branches")
+          .delete()
+          .eq("branch_name", branchName);
+        if (error) alert("Error resolving drop query: " + error.message);
+        await refreshAll();
+      }
+
+      const PAGE_TITLES = {
+        dashboard: "Dashboard",
+        submissions: "All Submissions",
+        drivers: "Driver Scores",
+        alerts: "Low-Rating Alerts",
+        management: "System Settings Management",
+      };
+
+      function showPage(name) {
+        document
+          .querySelectorAll(".page-section")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById(`page-${name}`).classList.add("active");
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((el) => el.classList.remove("active"));
+
+        if (
+          event &&
+          event.currentTarget &&
+          event.currentTarget.classList.contains("nav-item")
+        ) {
+          event.currentTarget.classList.add("active");
+        }
+
+        document.getElementById("pageTitle").textContent = PAGE_TITLES[name];
+        closeSidebar();
+
+        if (name === "dashboard") renderDashboard();
+        else if (name === "submissions") {
+          filteredRows = [...allRatings];
+          filterTable();
+        } else if (name === "drivers") renderDrivers();
+        else if (name === "alerts") renderAlerts();
+      }
+
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("sidebarOverlay").classList.toggle("active");
+      }
+      function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("active");
+      }
+
+      function updateDateBadge() {
+        document.getElementById("dateBadge").textContent =
+          new Date().toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          });
+      }
+
+      async function init() {
+        updateDateBadge();
+        await loadAll();
+        renderDashboard();
+      }
+      init();
+    </script>
+  </body>
+</html>
