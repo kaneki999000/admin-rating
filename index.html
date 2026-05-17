@@ -178,8 +178,6 @@
       display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid var(--border);
     }
-    .section-head-title { display: flex; align-items: center; gap: 8px; }
-    .section-head-title svg { width: 16px; height: 16px; color: var(--slate-mid); }
     .section-head h2 { font-family: "Sora", sans-serif; font-size: 14px; font-weight: 700; color: var(--slate); }
     .section-head .meta { font-size: 12px; color: var(--slate-light); font-weight: 500; }
 
@@ -245,71 +243,35 @@
     td { padding: 12px 16px; font-size: 13px; color: var(--slate-mid); vertical-align: middle; }
     td.driver-cell { font-weight: 700; color: var(--slate); }
     .pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px;
-      line-height: 1;
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
     }
-    .pill svg { width: 12px; height: 12px; flex-shrink: 0; }
     .pill-green { background: var(--green-light); color: var(--green-dark); }
     .pill-red { background: var(--red-light); color: var(--red); }
     .pill-amber { background: var(--amber-light); color: #b45309; }
     .pill-blue { background: var(--blue-light); color: var(--blue); }
 
-    /* ── TIDY RESPONSIVE FILTER BAR ── */
+    /* ── FILTERS ── */
     .filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
       background: #f8fafc;
     }
-    .filter-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--slate-mid);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .filter-label svg { width: 14px; height: 14px; color: var(--slate-light); }
-    
     .filter-bar input, .filter-bar select {
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-size: 13px;
-      font-family: inherit;
-      color: var(--slate);
-      background: var(--card);
-      outline: none;
-      transition: all 0.2s ease;
-      height: 40px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 7px 12px; font-size: 13px; font-family: inherit;
+      color: var(--slate); background: var(--card); outline: none;
+      transition: all 0.2s; appearance: none; -webkit-appearance: none;
     }
-    .filter-bar input:focus, .filter-bar select:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
-    }
-    .filter-bar input[type="text"] {
-      width: 240px;
-    }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--green-mid); }
+    .filter-bar input { width: 200px; }
+    .filter-label { font-size: 12px; font-weight: 600; color: var(--slate-light); }
     .filter-select-wrap { position: relative; }
-    .filter-select-wrap select {
-      padding-right: 36px;
-      min-width: 150px;
-      appearance: none;
-      -webkit-appearance: none;
-    }
     .filter-select-wrap::after {
-      content: ""; position: absolute; right: 14px; top: 50%;
+      content: ""; position: absolute; right: 10px; top: 50%;
       transform: translateY(-50%); width: 0; height: 0;
       border-left: 4px solid transparent; border-right: 4px solid transparent;
       border-top: 5px solid var(--slate-light); pointer-events: none;
-    }
-    .filter-bar input[type="date"] {
-      width: 160px;
     }
 
     /* ── PAGINATION ── */
@@ -328,7 +290,7 @@
     .pg-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
     .pg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* ── DRAWER (mobile detail panel) ── */
+    /* ── DRAWER ── */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(15,23,42,0.6);
       z-index: 300; display: none; align-items: flex-end; backdrop-filter: blur(2px);
@@ -352,13 +314,8 @@
     }
     .drawer-resp-row:last-child { border-bottom: none; }
     .drawer-q { flex: 1; color: var(--slate-mid); font-weight: 500; }
-    .drawer-q-text { display: block; }
-    .drawer-note { 
-      font-size: 11px; color: var(--slate-light); font-style: italic; margin-top: 5px; 
-      display: inline-flex; align-items: center; gap: 4px; background: #f8fafc; padding: 3px 8px; border-radius: 6px;
-    }
-    .drawer-note svg { width: 12px; height: 12px; color: var(--slate-mid); }
     .drawer-a { font-weight: 700; flex-shrink: 0; }
+    .drawer-note { font-size: 11px; color: var(--slate-light); font-style: italic; margin-top: 3px; }
     .drawer-close-btn {
       width: 100%; margin: 16px 0 8px; padding: 14px;
       background: #f1f5f9; border: none; border-radius: 12px;
@@ -367,8 +324,7 @@
 
     /* ── EMPTY / LOADER ── */
     .spinner { width: 32px; height: 32px; border: 3px solid var(--green-light); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 40px auto; }
-    .empty-msg { text-align: center; padding: 40px 20px; color: var(--slate-light); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; }
-    .empty-msg svg { width: 24px; height: 24px; color: var(--slate-light); }
+    .empty-msg { text-align: center; padding: 40px 20px; color: var(--slate-light); font-size: 14px; }
 
     /* ── PAGE VISIBILITY ── */
     .page-section { display: none; }
@@ -380,27 +336,26 @@
       z-index: 190; backdrop-filter: blur(2px);
     }
 
+    /* ── MANAGEMENT PANELS ── */
+    .mgmt-tabs { display: flex; gap: 8px; padding: 16px 20px; background: #f8fafc; border-bottom: 1px solid var(--border); }
+    .mgmt-tab { padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; font-size: 13px; font-weight: 600; color: var(--slate-mid); cursor: pointer; }
+    .mgmt-tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+    .mgmt-form-inline { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; background: #fff; }
+    .mgmt-form-inline input, .mgmt-form-inline select { border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 13px; outline: none; background: #fff; color: var(--slate); font-family: inherit; }
+    .mgmt-form-inline input:focus, .mgmt-form-inline select:focus { border-color: var(--green-mid); }
+    .mgmt-btn-add { background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .mgmt-btn-add:hover { background: var(--green-dark); }
+    .action-btn-group { display: flex; gap: 6px; }
+    .btn-action { border: none; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-edit { background: var(--blue-light); color: var(--blue); }
+    .btn-delete { background: var(--red-light); color: var(--red); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .two-col { grid-template-columns: 1fr; }
     }
-    @media (max-width: 768px) {
-      .filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-        padding: 14px 16px;
-      }
-      .filter-bar input[type="text"],
-      .filter-bar input[type="date"],
-      .filter-select-wrap,
-      .filter-select-wrap select {
-        width: 100% !important;
-        min-width: 0 !important;
-      }
-    }
-@media (max-width: 700px) {
+    @media (max-width: 700px) {
       :root { --sidebar-w: 240px; }
       .sidebar { transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); }
@@ -411,41 +366,16 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .content { padding: 16px; }
       
-      /* ── Telegram Mini App Filter Fixes ── */
-      .filter-bar { 
-        display: flex !important;
-        flex-direction: column !important; /* Stack everything into single rows */
-        gap: 12px !important; 
-        padding: 16px !important; 
-      }
+      .filter-bar { display: flex !important; flex-direction: column !important; gap: 12px !important; padding: 16px !important; }
+      .filter-label { width: 100%; margin-bottom: -4px; }
+      .filter-bar input[type="text"], .filter-select-wrap, .filter-select-wrap select { width: 100% !important; max-width: 100% !important; min-width: 100% !important; flex: none !important; display: block !important; box-sizing: border-box !important; }
       
-      .filter-label { 
-        width: 100%; 
-        margin-bottom: -4px; 
-      }
+      .filter-bar input[type="date"] { -webkit-appearance: none !important; appearance: none !important; min-height: 40px !important; width: 100% !important; background-color: var(--card) !important; position: relative; box-sizing: border-box !important; }
+      .filter-bar input[type="date"]:not(:focus):invalid::before { content: "📅 Select Date"; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--slate-light); font-size: 13px; pointer-events: none; width: 100%; }
 
-      /* Make all inputs/dropdowns take up exactly 100% width of the screen */
-      .filter-bar input[type="text"],
-      .filter-bar input[type="date"],
-      .filter-select-wrap,
-      .filter-select-wrap select {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 100% !important;
-        flex: none !important;
-        display: block !important;
-        box-sizing: border-box !important;
-      }
+      .mgmt-form-inline { flex-direction: column; align-items: stretch; gap: 10px; }
+      .mgmt-form-inline input, .mgmt-form-inline select, .mgmt-btn-add { width: 100%; }
 
-      /* Core iOS Native Date Picker System Override */
-      .filter-bar input[type="date"] {
-        -webkit-appearance: none !important; /* Clears iOS Safari constraints */
-        appearance: none !important;
-        min-height: 40px !important; /* Guarantees enough vertical space for the inner text */
-        background-color: var(--card) !important;
-        line-height: normal !important;
-      }
-      
       .stat-value { font-size: 24px; }
       table thead th:nth-child(4),
       table thead th:nth-child(5),
@@ -489,6 +419,12 @@
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
       Low-Rating Alerts
       <span class="badge" id="alertBadge">0</span>
+    </button>
+
+    <div class="nav-section-label" style="margin-top:8px">Settings</div>
+    <button class="nav-item" onclick="showPage('management')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+      Data Management
     </button>
   </nav>
 
@@ -564,10 +500,7 @@
       <div class="two-col">
         <div class="section-card">
           <div class="section-head">
-            <div class="section-head-title">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m12 3a2 2 0 100-4H4a2 2 0 100 4h16z"/></svg>
-              <h2>Driver Leaderboard</h2>
-            </div>
+            <h2>🏆 Driver Leaderboard</h2>
             <span class="meta">By avg score</span>
           </div>
           <div class="driver-list" id="leaderboardList"><div class="spinner"></div></div>
@@ -575,10 +508,7 @@
 
         <div class="section-card">
           <div class="section-head">
-            <div class="section-head-title">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              <h2>Recent Alerts</h2>
-            </div>
+            <h2>⚠️ Recent Alerts</h2>
             <span class="meta">Low ratings flagged</span>
           </div>
           <div class="alert-list" id="alertList"><div class="spinner"></div></div>
@@ -588,10 +518,7 @@
       <div class="full-col">
         <div class="section-card">
           <div class="section-head">
-            <div class="section-head-title">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <h2>Branch Summary</h2>
-            </div>
+            <h2>📍 Branch Summary</h2>
             <span class="meta">Submissions per branch</span>
           </div>
           <div class="table-wrap">
@@ -607,19 +534,16 @@
     <div id="page-submissions" class="page-section">
       <div class="section-card">
         <div class="filter-bar">
-          <span class="filter-label">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-            Filter:
-          </span>
+          <span class="filter-label">Filter:</span>
           <input type="text" id="filterSearch" placeholder="Driver / Submitter…" oninput="filterTable()" />
           <div class="filter-select-wrap">
             <select id="filterBranch" onchange="filterTable()"><option value="">All Branches</option></select>
           </div>
           <div class="filter-select-wrap">
             <select id="filterAlert" onchange="filterTable()">
-              <option value="">All Statuses</option>
-              <option value="alert">Alerts Only</option>
-              <option value="ok">OK Only</option>
+              <option value="">All</option>
+              <option value="alert">⚠️ Alerts only</option>
+              <option value="ok">✅ OK only</option>
             </select>
           </div>
           <input type="date" id="filterDate" onchange="filterTable()" required />
@@ -637,10 +561,7 @@
     <div id="page-drivers" class="page-section">
       <div class="section-card">
         <div class="section-head">
-          <div class="section-head-title">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            <h2>Driver Performance Scores</h2>
-          </div>
+          <h2>Driver Performance Scores</h2>
           <span class="meta" id="driversCount">—</span>
         </div>
         <div class="table-wrap">
@@ -654,13 +575,7 @@
 
     <div id="page-alerts" class="page-section">
       <div class="section-card">
-        <div class="section-head">
-          <div class="section-head-title">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <h2>All Low-Rating Alerts</h2>
-          </div>
-          <span class="meta" id="alertsCount">—</span>
-        </div>
+        <div class="section-head"><h2>⚠️ All Low-Rating Alerts</h2><span class="meta" id="alertsCount">—</span></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Driver</th><th>Branch</th><th>Trip Date</th><th>Flagged Issues</th><th>Submitted By</th><th>Time</th></tr></thead>
@@ -670,7 +585,71 @@
       </div>
     </div>
 
-  </div></div><div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()">
+    <div id="page-management" class="page-section">
+      <div class="section-card">
+        <div class="mgmt-tabs">
+          <button class="mgmt-tab active" id="tab-questions" onclick="switchMgmtTab('questions')">📝 Questions</button>
+          <button class="mgmt-tab" id="tab-drivers" onclick="switchMgmtTab('drivers')">🚗 Drivers</button>
+          <button class="mgmt-tab" id="tab-branches" onclick="switchMgmtTab('branches')">📍 Branches</button>
+        </div>
+
+        <div id="mgmt-sec-questions" class="mgmt-section-content">
+          <div class="mgmt-form-inline">
+            <input type="hidden" id="mgmtQuestionId" value="" />
+            <input type="text" id="mgmtQuestionText" placeholder="Enter question text..." style="flex:2" />
+            
+            <div class="filter-select-wrap">
+              <select id="mgmtQuestionType">
+                <option value="binary">🔘 binary (OKAY/NOT OKAY)</option>
+                <option value="score">⭐️ score (1-5)</option>
+              </select>
+            </div>
+            
+            <input type="number" id="mgmtQuestionOrder" placeholder="Order (e.g., 1)" style="width:90px" />
+            <button class="mgmt-btn-add" id="btnSaveQuestion" onclick="saveQuestion()">Add Question</button>
+            <button class="mgmt-tab" id="btnCancelQuestionEdit" onclick="cancelQuestionEdit()" style="display:none">Cancel</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:80px">Order</th><th>Question Text</th><th style="width:120px">Type</th><th style="width:120px">Actions</th></tr></thead>
+              <tbody id="mgmtQuestionsTableBody"><tr><td colspan="4"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="mgmt-sec-drivers" class="mgmt-section-content" style="display:none">
+          <div class="mgmt-form-inline">
+            <input type="text" id="mgmtDriverName" placeholder="Enter driver's full name..." style="flex:1" />
+            <button class="mgmt-btn-add" onclick="addDriver()">Add New Driver</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:80px">#</th><th>Driver Name</th><th style="width:100px">Actions</th></tr></thead>
+              <tbody id="mgmtDriversTableBody"><tr><td colspan="3"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="mgmt-sec-branches" class="mgmt-section-content" style="display:none">
+          <div class="mgmt-form-inline">
+            <input type="text" id="mgmtBranchName" placeholder="Enter unique branch name..." style="flex:1" />
+            <button class="mgmt-btn-add" onclick="addBranch()">Add New Branch</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Branch Location Name</th><th style="width:100px">Actions</th></tr></thead>
+              <tbody id="mgmtBranchesTableBody"><tr><td colspan="2"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()">
   <div class="drawer" onclick="event.stopPropagation()">
     <div class="drawer-handle"></div>
     <div class="drawer-head">
@@ -689,21 +668,28 @@
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpb3VwZmtocGR5ZmJ1YXRqdHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTU0OTcsImV4cCI6MjA5MjkzMTQ5N30.KpQ3syRkSzCyPgkbeVX6OYY8pu13QshL-iQ2F48Vevk";
   const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ── STATE ──
   let allRatings = [], allDrivers = {}, allQuestions = [], allBranches = [];
   let filteredRows = [];
   let currentPage = 1;
   const PAGE_SIZE = 15;
   const AVATAR_COLORS = ["#10b981","#3b82f6","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16"];
+  let currentMgmtTab = "questions";
 
-  // ── HELPERS ──
-  function isBad(val) { return val === "1" || val === "2" || val === "NOT OKAY"; }
-  function avgScore(responses) {
-    if (!responses) return null;
-    const vals = Object.values(responses).map(r => r.answer).filter(a => a && a !== "" && a !== "NOT OKAY" && a !== "OK");
-    if (!vals.length) return null;
-    return (vals.reduce((s, v) => s + parseFloat(v), 0) / vals.length).toFixed(2);
-  }
+ // ── HELPERS ──
+// Updated to catch "NOT OK" matching your UI button image
+function isBad(val) { 
+  return val === "1" || val === "2" || val === "NOT OKAY" || val === "NOT OK"; 
+}
+
+function avgScore(responses) {
+  if (!responses) return null;
+  const vals = Object.values(responses)
+    .map(r => r.answer)
+    .filter(a => a && a !== "" && a !== "NOT OKAY" && a !== "NOT OK" && a !== "OK");
+  if (!vals.length) return null;
+  return (vals.reduce((s, v) => s + parseFloat(v), 0) / vals.length).toFixed(2);
+}
+
   function hasAlert(responses) {
     if (!responses) return false;
     return Object.values(responses).some(r => isBad(r.answer));
@@ -734,7 +720,6 @@
   }
   function avatarColor(name) { return AVATAR_COLORS[(name || "").charCodeAt(0) % AVATAR_COLORS.length]; }
 
-  // ── DATA LOAD ──
   async function loadAll() {
     const [ratingRes, driverRes, questionRes, branchRes] = await Promise.all([
       db.from("ratings").select("*").order("created_at", { ascending: false }),
@@ -745,15 +730,18 @@
     allRatings = ratingRes.data || [];
     allQuestions = questionRes.data || [];
     allBranches = branchRes.data || [];
-    (driverRes.data || []).forEach(d => allDrivers[d.id] = d.name);
+    
+    allDrivers = {};
+    const driverRawList = driverRes.data || [];
+    driverRawList.forEach(d => allDrivers[d.id] = d.name);
 
-    // populate branch filter
     const fb = document.getElementById("filterBranch");
     fb.innerHTML = '<option value="">All Branches</option>' +
       allBranches.map(b => `<option value="${b.branch_name}">${b.branch_name}</option>`).join("");
+      
+    renderMgmtTables(driverRawList);
   }
 
-  // ── REFRESH ──
   async function refreshAll() {
     const btn = document.getElementById("refreshBtn");
     btn.classList.add("spinning");
@@ -771,13 +759,10 @@
     else if (id === "page-alerts") renderAlerts();
   }
 
-  // ── DASHBOARD ──
   function renderDashboard() {
     const total = allRatings.length;
     const alertCount = allRatings.filter(r => hasAlert(r.responses)).length;
     const driverIds = [...new Set(allRatings.map(r => r.driver_id))];
-
-    // avg score
     const allScores = allRatings.map(r => avgScore(r.responses)).filter(v => v !== null).map(Number);
     const overallAvg = allScores.length ? (allScores.reduce((a, b) => a + b, 0) / allScores.length).toFixed(2) : "—";
 
@@ -814,14 +799,7 @@
       .sort((a, b) => b.avg - a.avg).slice(0, 8);
 
     const el = document.getElementById("leaderboardList");
-    if (!sorted.length) { 
-      el.innerHTML = `
-        <div class="empty-msg">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-          <span>No data yet.</span>
-        </div>`; 
-      return; 
-    }
+    if (!sorted.length) { el.innerHTML = '<div class="empty-msg">No data yet.</div>'; return; }
     el.innerHTML = sorted.map((d, i) => `
       <div class="driver-row">
         <div class="driver-rank">${i + 1}</div>
@@ -838,14 +816,7 @@
   function renderAlertList() {
     const alerts = allRatings.filter(r => hasAlert(r.responses)).slice(0, 6);
     const el = document.getElementById("alertList");
-    if (!alerts.length) { 
-      el.innerHTML = `
-        <div class="empty-msg">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span>No alerts! All ratings are positive.</span>
-        </div>`; 
-      return; 
-    }
+    if (!alerts.length) { el.innerHTML = '<div class="empty-msg">🎉 No alerts! All ratings are positive.</div>'; return; }
     el.innerHTML = alerts.map(r => {
       const issues = Object.values(r.responses || {}).filter(resp => isBad(resp.answer)).length;
       return `<div class="alert-row">
@@ -875,28 +846,17 @@
     tbody.innerHTML = rows.map(([branch, d]) => {
       const avg = d.scores.length ? (d.scores.reduce((a, b) => a + b, 0) / d.scores.length).toFixed(2) : null;
       const status = d.alerts === 0 ? "pill-green" : d.alerts < 3 ? "pill-amber" : "pill-red";
-      
-      let statusIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
-      let statusText = "Good";
-      if (d.alerts > 0 && d.alerts < 3) {
-        statusIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
-        statusText = "Watch";
-      } else if (d.alerts >= 3) {
-        statusIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
-        statusText = "Critical";
-      }
-
+      const statusText = d.alerts === 0 ? "✅ Good" : d.alerts < 3 ? "⚠️ Watch" : "🔴 Critical";
       return `<tr>
         <td class="driver-cell">${branch}</td>
         <td>${d.count}</td>
         <td><span class="pill ${avg === null ? 'pill-blue' : pillClass(avg)}">${avg || "N/A"}</span></td>
         <td>${d.alerts === 0 ? "—" : `<span class="pill pill-red">${d.alerts}</span>`}</td>
-        <td><span class="pill ${status}">${statusIcon}${statusText}</span></td>
+        <td><span class="pill ${status}">${statusText}</span></td>
       </tr>`;
     }).join("");
   }
 
-  // ── SUBMISSIONS ──
   function filterTable() {
     const search = document.getElementById("filterSearch").value.toLowerCase();
     const branch = document.getElementById("filterBranch").value;
@@ -921,22 +881,17 @@
     const start = (currentPage - 1) * PAGE_SIZE;
     const rows = filteredRows.slice(start, start + PAGE_SIZE);
     const tbody = document.getElementById("submissionsTableBody");
-    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>No submissions match the filter.</span></div></td></tr>'; renderPagination(); return; }
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg">No submissions match the filter.</div></td></tr>'; renderPagination(); return; }
 
     tbody.innerHTML = rows.map(r => {
       const isAlert = hasAlert(r.responses);
-      const statusIcon = isAlert 
-        ? `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`
-        : `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
-      const statusText = isAlert ? "Alert" : "OK";
-
       return `<tr onclick="openDrawer('${r.id}')">
         <td class="driver-cell">${allDrivers[r.driver_id] || "Unknown"}</td>
         <td>${r.branch || "—"}</td>
         <td>${r.rating_date || "—"}</td>
         <td>${r.submitted_by || "—"}</td>
         <td style="font-family:'DM Mono',monospace;font-size:12px">${new Date(r.created_at).toLocaleString()}</td>
-        <td><span class="pill ${isAlert ? 'pill-red' : 'pill-green'}">${statusIcon}${statusText}</span></td>
+        <td><span class="pill ${isAlert ? 'pill-red' : 'pill-green'}">${isAlert ? "⚠️ Alert" : "✅ OK"}</span></td>
       </tr>`;
     }).join("");
     renderPagination();
@@ -965,7 +920,6 @@
     renderSubmissionsTable();
   }
 
-  // ── DRAWER ──
   function openDrawer(id) {
     const r = allRatings.find(x => x.id === id);
     if (!r) return;
@@ -978,12 +932,21 @@
       body.innerHTML = allQuestions.map(q => {
         const resp = (r.responses || {})[q.id];
         if (!resp) return "";
-        const bad = isBad(resp.answer);
-        const noteHtml = resp.note ? `<div class="drawer-note"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> ${resp.note}</div>` : "";
         
+        let answerHTML = "";
+        // Support UI transforms dynamically based on binary vs score question models
+        if (q.question_type === "binary") {
+          const isNegative = isBad(resp.answer);
+          const displayLabel = isNegative ? "❌ NOT OKAY" : "🟢 OKAY";
+          answerHTML = `<span class="pill ${isNegative ? 'pill-red' : 'pill-green'}">${displayLabel}</span>`;
+        } else {
+          const bad = isBad(resp.answer);
+          answerHTML = `<span style="font-weight:700; color:${bad ? 'var(--red)' : 'var(--green-dark)'}">${resp.answer || "Skipped"}</span>`;
+        }
+
         return `<div class="drawer-resp-row">
-          <div class="drawer-q"><span class="drawer-q-text">${q.question_text}</span>${noteHtml}</div>
-          <div class="drawer-a" style="color:${bad ? 'var(--red)' : resp.answer === '' ? 'var(--slate-light)' : 'var(--green-dark)'}">${resp.answer || "Skipped"}</div>
+          <div class="drawer-q">${q.question_text}${resp.note ? `<div class="drawer-note">📝 ${resp.note}</div>` : ""}</div>
+          <div class="drawer-a">${answerHTML}</div>
         </div>`;
       }).join("");
     }
@@ -996,7 +959,6 @@
     document.body.style.overflow = "";
   }
 
-  // ── DRIVERS ──
   function renderDrivers() {
     const driverStats = {};
     allRatings.forEach(r => {
@@ -1027,13 +989,12 @@
     </tr>`).join("");
   }
 
-  // ── ALERTS PAGE ──
   function renderAlerts() {
     const alerts = allRatings.filter(r => hasAlert(r.responses));
     document.getElementById("alertsCount").textContent = `${alerts.length} alerts`;
     document.getElementById("alertBadge").textContent = alerts.length;
     const tbody = document.getElementById("alertsTableBody");
-    if (!alerts.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>No low-rating alerts found.</span></div></td></tr>'; return; }
+    if (!alerts.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-msg">🎉 No low-rating alerts found.</div></td></tr>'; return; }
     tbody.innerHTML = alerts.map(r => {
       const issues = Object.entries(r.responses || {})
         .filter(([, resp]) => isBad(resp.answer))
@@ -1052,19 +1013,158 @@
     }).join("");
   }
 
-  // ── NAV ──
+  function switchMgmtTab(tabName) {
+    currentMgmtTab = tabName;
+    document.querySelectorAll(".mgmt-tab").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".mgmt-section-content").forEach(el => el.style.display = "none");
+    
+    document.getElementById(`tab-${tabName}`).classList.add("active");
+    document.getElementById(`mgmt-sec-${tabName}`).style.display = "block";
+  }
+
+  function renderMgmtTables(driverRawList) {
+    // 1. Render Questions Table with Type Column updates
+    const qTbody = document.getElementById("mgmtQuestionsTableBody");
+    if(!allQuestions.length) {
+      qTbody.innerHTML = '<tr><td colspan="4"><div class="empty-msg">No data inside questions table.</div></td></tr>';
+    } else {
+      qTbody.innerHTML = allQuestions.map(q => `
+        <tr>
+          <td style="font-family:'DM Mono', monospace; font-weight:700">${q.sort_order}</td>
+          <td>${q.question_text}</td>
+          <td><span class="pill ${q.question_type === 'binary' ? 'pill-blue' : 'pill-green'}">${q.question_type || 'score'}</span></td>
+          <td>
+            <div class="action-btn-group">
+              <button class="btn-action btn-edit" onclick="initEditQuestion('${q.id}', '${q.question_text.replace(/'/g, "\\'")}', ${q.sort_order}, '${q.question_type || 'score'}')">Edit</button>
+              <button class="btn-action btn-delete" onclick="deleteQuestion('${q.id}')">Delete</button>
+            </div>
+          </td>
+        </tr>`).join("");
+    }
+
+    // 2. Render Drivers Table (# 1,2,3...)
+    const dTbody = document.getElementById("mgmtDriversTableBody");
+    if(!driverRawList || !driverRawList.length) {
+      dTbody.innerHTML = '<tr><td colspan="3"><div class="empty-msg">No entries in drivers list.</div></td></tr>';
+    } else {
+      dTbody.innerHTML = driverRawList.map((d, index) => `
+        <tr>
+          <td style="font-family:'DM Mono', monospace; font-weight:700; color: var(--slate-mid);"># ${index + 1}</td>
+          <td class="driver-cell">${d.name}</td>
+          <td>
+            <button class="btn-action btn-delete" onclick="deleteDriver('${d.id}')">Delete</button>
+          </td>
+        </tr>`).join("");
+    }
+
+    // 3. Render Branches Table
+    const bTbody = document.getElementById("mgmtBranchesTableBody");
+    if(!allBranches.length) {
+      bTbody.innerHTML = '<tr><td colspan="2"><div class="empty-msg">No entries in branch data list.</div></td></tr>';
+    } else {
+      bTbody.innerHTML = allBranches.map(b => `
+        <tr>
+          <td class="driver-cell">📍 ${b.branch_name}</td>
+          <td>
+            <button class="btn-action btn-delete" onclick="deleteBranch('${b.branch_name.replace(/'/g, "\\'")}')">Delete</button>
+          </td>
+        </tr>`).join("");
+    }
+  }
+
+  function initEditQuestion(id, text, order, type) {
+    document.getElementById("mgmtQuestionId").value = id;
+    document.getElementById("mgmtQuestionText").value = text;
+    document.getElementById("mgmtQuestionOrder").value = order;
+    document.getElementById("mgmtQuestionType").value = type || "score";
+    document.getElementById("btnSaveQuestion").textContent = "Update Question";
+    document.getElementById("btnCancelQuestionEdit").style.display = "inline-block";
+  }
+
+  function cancelQuestionEdit() {
+    document.getElementById("mgmtQuestionId").value = "";
+    document.getElementById("mgmtQuestionText").value = "";
+    document.getElementById("mgmtQuestionOrder").value = "";
+    document.getElementById("mgmtQuestionType").value = "binary";
+    document.getElementById("btnSaveQuestion").textContent = "Add Question";
+    document.getElementById("btnCancelQuestionEdit").style.display = "none";
+  }
+
+  async function saveQuestion() {
+    const id = document.getElementById("mgmtQuestionId").value;
+    const text = document.getElementById("mgmtQuestionText").value.trim();
+    const orderNum = parseInt(document.getElementById("mgmtQuestionOrder").value);
+    const typeStr = document.getElementById("mgmtQuestionType").value;
+
+    if(!text || isNaN(orderNum)) { alert("Please supply text and sort configuration code."); return; }
+
+    if(id) {
+      const { error } = await db.from("questions").update({ question_text: text, sort_order: orderNum, question_type: typeStr }).eq("id", id);
+      if(error) alert("Error modifying row: " + error.message);
+    } else {
+      const { error } = await db.from("questions").insert([{ question_text: text, sort_order: orderNum, question_type: typeStr }]);
+      if(error) alert("Error saving row: " + error.message);
+    }
+    cancelQuestionEdit();
+    await refreshAll();
+  }
+
+  async function deleteQuestion(id) {
+    if(!confirm("Are you sure you want to delete this question configuration?")) return;
+    const { error } = await db.from("questions").delete().eq("id", id);
+    if(error) alert("Could not drop reference constraints: " + error.message);
+    await refreshAll();
+  }
+
+  async function addDriver() {
+    const name = document.getElementById("mgmtDriverName").value.trim();
+    if(!name) { alert("Please include driver's name"); return; }
+    const { error } = await db.from("drivers").insert([{ name: name }]);
+    if(error) { alert("Insert Error: " + error.message); }
+    document.getElementById("mgmtDriverName").value = "";
+    await refreshAll();
+  }
+
+  async function deleteDriver(id) {
+    if(!confirm("Are you sure you want to completely delete this driver configuration?")) return;
+    const { error } = await db.from("drivers").delete().eq("id", id);
+    if(error) alert("Error deleting element: " + error.message);
+    await refreshAll();
+  }
+
+  async function addBranch() {
+    const name = document.getElementById("mgmtBranchName").value.trim();
+    if(!name) { alert("Please provide a valid branch tracking name."); return; }
+    const { error } = await db.from("branches").insert([{ branch_name: name }]);
+    if(error) { alert("Insert Error: " + error.message); }
+    document.getElementById("mgmtBranchName").value = "";
+    await refreshAll();
+  }
+
+  async function deleteBranch(branchName) {
+    if(!confirm("Are you sure you want to clear this tracking branch?")) return;
+    const { error } = await db.from("branches").delete().eq("branch_name", branchName);
+    if(error) alert("Error resolving drop query: " + error.message);
+    await refreshAll();
+  }
+
   const PAGE_TITLES = {
     dashboard: "Dashboard",
     submissions: "All Submissions",
     drivers: "Driver Scores",
     alerts: "Low-Rating Alerts",
+    management: "System Settings Management"
   };
 
   function showPage(name) {
     document.querySelectorAll(".page-section").forEach(el => el.classList.remove("active"));
     document.getElementById(`page-${name}`).classList.add("active");
     document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
-    event.currentTarget.classList.add("active");
+    
+    if (event && event.currentTarget && event.currentTarget.classList.contains("nav-item")) {
+      event.currentTarget.classList.add("active");
+    }
+    
     document.getElementById("pageTitle").textContent = PAGE_TITLES[name];
     closeSidebar();
 
@@ -1074,7 +1174,6 @@
     else if (name === "alerts") renderAlerts();
   }
 
-  // ── SIDEBAR MOBILE ──
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
     document.getElementById("sidebarOverlay").classList.toggle("active");
@@ -1084,12 +1183,10 @@
     document.getElementById("sidebarOverlay").classList.remove("active");
   }
 
-  // ── DATE BADGE ──
   function updateDateBadge() {
     document.getElementById("dateBadge").textContent = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   }
 
-  // ── INIT ──
   async function init() {
     updateDateBadge();
     await loadAll();
