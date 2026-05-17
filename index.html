@@ -411,14 +411,34 @@
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .content { padding: 16px; }
       
-      /* Better mobile spacing and fluid widths for the filter items */
-      .filter-bar { gap: 8px; padding: 12px; }
-      .filter-label { width: 100%; margin-bottom: 2px; } /* Wraps label to its own row */
-      .filter-bar input, 
-      .filter-bar select, 
+      /* Mobile Filter Optimization */
+      .filter-bar { 
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; 
+        padding: 14px; 
+      }
+      .filter-label { 
+        width: 100%; 
+        margin-bottom: -2px; 
+      }
+      /* Search and Branch/Alert dropdowns share rows comfortably */
+      #filterSearch {
+        flex: 1 1 100%; /* Search gets its own row or spans full width */
+      }
       .filter-select-wrap { 
-        flex: 1 1 calc(50% - 8px); /* Let elements grow side-by-side equitably */
-        min-width: 120px; 
+        flex: 1 1 calc(50% - 5px); /* Side by side dropdowns */
+        min-width: 110px;
+      }
+      .filter-select-wrap select {
+        width: 100%;
+      }
+      /* Give the date picker full width so the iOS calendar layout fits perfectly */
+      #filterDate { 
+        flex: 1 1 100%; 
+        width: 100%;
+        display: block;
+        box-sizing: border-box;
       }
       
       .stat-value { font-size: 24px; }
